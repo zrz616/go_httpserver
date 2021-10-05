@@ -1,0 +1,8 @@
+root = true
+
+[*]
+indent_style = space
+indent_size = 4
+charset = utf-8
+trim_trailing_whitespace = true # 删除结尾多余空格
+end_of_line = lf # 统一windows和linux换行符
