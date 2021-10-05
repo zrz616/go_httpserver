@@ -1,6 +1,9 @@
 # httpserver
 ## Start
 设置环境变量`VERSION`
+日志级别：
+  1. V1 -- 正常信息
+  2. V2 -- bebug信息
 
 Usage of ./main:
   -alsologtostderr
