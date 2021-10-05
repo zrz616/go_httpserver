@@ -5,6 +5,7 @@
   1. V1 -- 正常信息
   2. V2 -- bebug信息
 
+``` shell
 Usage of ./main:
   -alsologtostderr
         log to standard error as well as files
@@ -24,3 +25,4 @@ Usage of ./main:
         log level for V logs
   -vmodule value
         comma-separated list of pattern=N settings for file-filtered logging
+```
