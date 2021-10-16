@@ -1,4 +1,4 @@
-module github.com/go_practice
+module github.com/httpserver
 
 go 1.16
 
