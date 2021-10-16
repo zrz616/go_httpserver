@@ -4,6 +4,8 @@ COPY . /go/src/httpserver/
 RUN go build -o /bin/httpserver
 
 FROM alpine:3.14
+ENV VERSION="1.0.0"
 COPY --from=build /bin/httpserver /bin/httpserver
+EXPOSE 8080
 ENTRYPOINT ["/bin/httpserver"]
 CMD ["-v=1", "-logtostderr=true"]

@@ -1,4 +1,10 @@
 # httpserver
+
+## example
+``` shell
+docker run -p 8082:8080 -d vincent616/httpserver --host=0.0.0.0 -v=1 -logtostderr=true
+```
+
 ## Feature
 1.当访问`localhost/foo`时，接收客户端 request，并将 request 中带的 header 写入 response header
 2.读取当前系统的环境变量中的 VERSION 配置，并写入 response header
