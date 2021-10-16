@@ -3,7 +3,7 @@ WORKDIR /go/src/httpserver/
 COPY . /go/src/httpserver/
 RUN go build -o /bin/httpserver
 
-FROM alpine3.14
+FROM alpine:3.14
 COPY --from=build /bin/httpserver /bin/httpserver
 ENTRYPOINT ["/bin/httpserver"]
-CMD ["-v=1 -logtostderr=true"]
+CMD ["-v=1", "-logtostderr=true"]
