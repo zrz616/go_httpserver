@@ -42,14 +42,12 @@ func healthcheckHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-    host := flag.String("host", "localhost", "specify the server binding host, default is localhost")
-    port := flag.String("port", "8080", "specify the server binding port, default 8080")
+    addr := flag.String("addr", ":8080", "specify the server binding address")
     flag.Parse()
     defer glog.Flush()
     // log.SetFlags(glog.Ldate | glog.Ltime)
-    address := *host + ":" + *port
-    glog.V(1).Infof("listening %s\n", address)
+    glog.V(1).Infof("listening %s\n", *addr)
     http.HandleFunc("/foo", fooHandler)
     http.HandleFunc("/healthz", healthcheckHandler)
-    glog.Fatal(http.ListenAndServe(address, nil))
+    glog.Fatal(http.ListenAndServe(*addr, nil))
 }
