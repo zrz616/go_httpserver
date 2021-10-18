@@ -1,12 +1,16 @@
 package main
 
 import (
+    "context"
     "flag"
     "fmt"
     "net"
     "net/http"
     "os"
+    "os/signal"
     "strings"
+    "syscall"
+    "time"
 
     "github.com/golang/glog"
 )
@@ -47,7 +51,31 @@ func main() {
     defer glog.Flush()
     // log.SetFlags(glog.Ldate | glog.Ltime)
     glog.V(1).Infof("listening %s\n", *addr)
-    http.HandleFunc("/foo", fooHandler)
-    http.HandleFunc("/healthz", healthcheckHandler)
-    glog.Fatal(http.ListenAndServe(*addr, nil))
+    mux := http.NewServeMux()
+    mux.HandleFunc("/foo", fooHandler)
+    mux.HandleFunc("/healthz", healthcheckHandler)
+    // glog.Fatal(http.ListenAndServe(*addr, nil))
+    srv := &http.Server{
+        Addr:    *addr,
+        Handler: mux,
+    }
+
+    go func() {
+        if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+            glog.Fatal("Listen: %s\n", err)
+        }
+    }()
+
+    quit := make(chan os.Signal, 1)
+    signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+    <-quit
+    glog.V(1).Info("httpserver shutting down...")
+
+    ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+    defer cancel()
+    if err := srv.Shutdown(ctx); err != nil {
+        glog.Fatal("httpserver forced to shutdown: ", err)
+    }
+
+    glog.V(1).Info("httpserver exiting")
 }
