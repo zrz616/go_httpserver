@@ -25,7 +25,10 @@ spec:
     metadata:
       labels:
         app: httpserver
+<<<<<<< HEAD
         role: backend
+=======
+>>>>>>> 37bb61f58ade593c71b38636b70bb6b523dd31d1
     spec:
       containers:
       - name: httpserver
