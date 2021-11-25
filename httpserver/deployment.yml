@@ -28,13 +28,13 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: vincent616/httpserver:v1.0@sha256:2d9f3bd89fe9da54ca86fbc7b277a97907d94409f1fb58648ee81d1d9fd2d1e0
+        image: vincent616/httpserver:v1.0.2@sha256:5a21603635be8e5906e5ccfc44f34649ec4d2e762599692ddaa3fbbf1232c5fc
         imagePullPolicy: IfNotPresent
         env:
           - name: VERSION
-            value: 1.0.0
+            value: "1.0.0"
           - name: GLOG_LEVEL
-            value: 1
+            value: "1"
         ports:
           - name: httpserver-port
             containerPort: 8080
