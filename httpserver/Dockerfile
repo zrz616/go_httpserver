@@ -5,6 +5,7 @@ RUN go build -o /bin/httpserver
 
 FROM alpine:3.14
 ENV VERSION="1.0.0"
+ENV GLOG_LEVEL="1"
 COPY --from=build /bin/httpserver /bin/httpserver
 EXPOSE 8080
 ENTRYPOINT ["/bin/httpserver"]

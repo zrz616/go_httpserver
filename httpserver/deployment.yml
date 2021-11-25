@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: httpserver
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: httpserver
+  namespace: httpserver
+data:
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpserver
+  namespace: httpserver
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: httpserver
+      role: backend
+  template:
+    metadata:
+    labels:
+      app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: vincent616/httpserver:v1.0@sha256:2d9f3bd89fe9da54ca86fbc7b277a97907d94409f1fb58648ee81d1d9fd2d1e0
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: VERSION
+              value: 1.0.0
+            - name: GLOG_LEVEL
+              value: 1
+          ports:
+            - name: httpserver-port
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /healthz
+              port: httpserver-port
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+            terminationGracePeriodSeconds: 60
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: httpserver-port
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            requests:
+              cpu: 100m
+              memory: 90Mi
+            limits:
+              cpu: 100m
+              memory: 90Mi
+        nodeSelector:
+          kubernetes.io/os: linux
