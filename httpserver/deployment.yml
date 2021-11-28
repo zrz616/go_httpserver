@@ -27,7 +27,7 @@ spec:
         app: httpserver
         role: backend
     spec:
-      affinity:
+      affinity: # 反亲和设置，让pod尽量分布在不同节点
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 100
@@ -73,7 +73,7 @@ spec:
           periodSeconds: 10
           successThreshold: 1
           timeoutSeconds: 1
-        resources:
+        resources: # qosClass: Guaranteed
           requests:
             cpu: 100m
             memory: 90Mi

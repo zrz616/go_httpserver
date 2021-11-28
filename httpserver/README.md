@@ -1,5 +1,15 @@
 # httpserver
 
+## tls
+``` shell
+sh gen-tls.sh # 生成密钥证书和secret.yaml配置
+k apply -f secret.yaml
+k apply -f service.yaml
+k apply -f ingress.yaml
+INGRESS_CONTROLLER_PORT=`k get svc ingress-nginx-controller -n ingress-nginx -oyaml| grep -A 6 https | grep nodePort| awk -n '{print $NF}'`
+curl https://cncamp.com:$INGRESS_CONTROLLER_PORT --cacert "$(pwd)/tls.crt" --resolve "cncamp.com:$INGRESS_CONTROLLER_PORT:192.168.34.2"
+```
+
 ## example
 ``` shell
 docker run -p 8082:8080 -d vincent616/httpserver -v=1 -logtostderr=true
