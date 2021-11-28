@@ -27,6 +27,15 @@ spec:
         app: httpserver
         role: backend
     spec:
+      podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                    - httpserver
+            topologyKey: kubernetes.io/hostname
       containers:
       - name: httpserver
         image: vincent616/httpserver:v1.0.2@sha256:5a21603635be8e5906e5ccfc44f34649ec4d2e762599692ddaa3fbbf1232c5fc
