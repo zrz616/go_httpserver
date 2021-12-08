@@ -8,6 +8,9 @@ import (
     "strings"
 
     "github.com/golang/glog"
+    "github.com/prometheus/client_golang/prometheus/promhttp"
+
+    "github.com/zrz616/httpserver/metrics"
 )
 
 const welcomeMsg = "Check the Version in Responses Headers"
@@ -45,9 +48,11 @@ func healthcheckHandler(w http.ResponseWriter, r *http.Request) {
 
 // NewServer 根据addr提供http.Server
 func NewServer(addr string) *http.Server {
+    metrics.Register()
     mux := http.NewServeMux()
     mux.HandleFunc("/", rootHandler)
     mux.HandleFunc("/healthz", healthcheckHandler)
+    mux.Handle("/metrics", promhttp.Handler())
     return &http.Server{
         Addr:    addr,
         Handler: mux,
