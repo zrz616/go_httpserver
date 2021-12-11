@@ -2,6 +2,7 @@ package metrics
 
 import (
     "fmt"
+    "time"
 
     "github.com/prometheus/client_golang/prometheus"
 )
@@ -13,6 +14,29 @@ const (
 var (
     functionLatency = CreateExecutionTimeMrtric(metricsNamespace, "Time spent.")
 )
+
+type ExecutionTimer struct {
+    histo *prometheus.HistogramVec
+    start time.Time
+    last  time.Time
+}
+
+func NewTimer() *ExecutionTimer {
+    return NewExecutionTimer(functionLatency)
+}
+
+func NewExecutionTimer(histo *prometheus.HistogramVec) *ExecutionTimer {
+    now := time.Now()
+    return &ExecutionTimer{
+        histo: histo,
+        start: now,
+        last:  now,
+    }
+}
+
+func (t *ExecutionTimer) ObserveTotal() {
+    (*t.histo).WithLabelValues("total").Observe(time.Now().Sub(t.start).Seconds())
+}
 
 // Register 提供prometheus.Register
 func Register() {

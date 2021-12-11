@@ -2,10 +2,12 @@ package httpserver
 
 import (
     "fmt"
+    "math/rand"
     "net"
     "net/http"
     "os"
     "strings"
+    "time"
 
     "github.com/golang/glog"
     "github.com/prometheus/client_golang/prometheus/promhttp"
@@ -23,9 +25,18 @@ func getClientIP(r *http.Request) string {
     return ""
 }
 
+func randInt(min int, max int) int {
+    rand.Seed(time.Now().UTC().UnixNano())
+    return min + rand.Intn(max-min)
+}
+
 func rootHandler(w http.ResponseWriter, r *http.Request) {
     glog.V(2).Info("fooHandler")
     glog.V(2).Info(r.Header)
+    timer := metrics.NewTimer()
+    defer timer.ObserveTotal()
+    delay := randInt(10, 2000)
+    time.Sleep(time.Millisecond * time.Duration(delay))
     for k, v := range r.Header {
         w.Header().Set(k, strings.Join(v, ", "))
     }
