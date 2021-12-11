@@ -44,7 +44,7 @@ spec:
               topologyKey: kubernetes.io/hostname
       containers:
       - name: httpserver
-        image: vincent616/httpserver:v1.0.3@sha256:5a21603635be8e5906e5ccfc44f34649ec4d2e762599692ddaa3fbbf1232c5fc
+        image: vincent616/httpserver:v1.0.3@sha256:fe1c2edbfeb61044d6fd768225e40d1f328b1cb2f9be63f6e1acb62328e2a855
         imagePullPolicy: IfNotPresent
         env:
           - name: VERSION

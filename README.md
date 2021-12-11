@@ -1,5 +1,7 @@
 # httpserver
 
+<details>
+<summary><img src="https://img.shields.io/badge/HW02-Docker-2496ed?logo=docker" /></summary>
 ## tls
 ``` shell
 sh gen-tls.sh # 生成密钥证书和secret.yaml配置
@@ -46,3 +48,27 @@ Usage of ./main:
   -vmodule value
         comma-separated list of pattern=N settings for file-filtered logging
 ```
+</details>
+
+<details>
+<summary><img src="https://img.shields.io/badge/HW04-Prometheus-e6522c?logo=Prometheus" /></summary>
+
+## add grafana repo
+``` shell
+helm repo add grafana https://grafana.github.io/helm-charts
+```
+
+## download loki-stack
+``` shell
+helm pull grafana/loki-stack
+tar -xvf loki-stack-2.5.0.tgz
+# Kubernetes v1.22+需要替换rbac.authorization.k8s.io/v1beta1为rbac.authorization.k8s.io/v1
+find ~/loki-stack -type f -exec sed -i s#rbac.authorization.k8s.io/v1beta1#rbac.authorization.k8s.io/v1#g {} +
+helm upgrade --install loki ./loki-stack --set grafana.enabled=true,prometheus.enabled=true,prometheus.alertmanager.persistentVolume.enabled=false,prometheus.server.persistentVolume.enabled=false
+```
+## Prometheus查询示例
+![Prometheus查询示例](images/prometheus.png)
+
+## grafana查询示例
+![grafana查询示例](images/grafana.png)
+</details>
