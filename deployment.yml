@@ -23,6 +23,9 @@ spec:
       role: backend
   template:
     metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
       labels:
         app: httpserver
         role: backend
@@ -45,7 +48,7 @@ spec:
         imagePullPolicy: IfNotPresent
         env:
           - name: VERSION
-            value: "1.0.2"
+            value: "1.0.3"
           - name: GLOG_LEVEL
             value: "1"
         ports:

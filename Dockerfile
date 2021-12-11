@@ -5,7 +5,7 @@ ENV GOPROXY=https://goproxy.cn
 RUN go build -o /bin/httpserver
 
 FROM alpine:3.14
-ENV VERSION="1.0.2"
+ENV VERSION="1.0.3"
 ENV GLOG_LEVEL="1"
 COPY --from=build /bin/httpserver /bin/httpserver
 EXPOSE 8080
