@@ -76,4 +76,25 @@ helm upgrade --install loki ./loki-stack --set grafana.enabled=true,prometheus.e
 <details>
 <summary><img src="https://img.shields.io/badge/HW05-Istio-466bb0?logo=Istio" /></summary>
 
+## istio代理https
+```shell
+# 在namespaces中添加istio-injection=enabled标签，启用istio serviceMesh
+# 要注意顺序，先建立pod后给namespace添加标签不会创建sidecar
+kubectl label ns httpserver istio-injection=enabled
+kubectl create -f httpserver.yaml
+kubectl apply -f istio/secret.yml -n httpserver
+kubectl apply -f istio/istio-specs.yaml -n httpserver
+```
+
+## istio analyze
+``` shell
+istioctl analyze -n httpserver # 分析istio相关配置
+```
+
+## curl 访问
+```shell
+INGRESS_IP=$(k get svc istio-ingressgateway -nistio-system | awk  '/istio/ {print $3}')
+# istio-ingressgateway必须通过指定域名访问，通过IP无法访问，header带Host也不行
+curl --resolve cncamp.com:443:$INGRESS_IP https://cncamp.com/healthz -v -k
+```
 </details>
