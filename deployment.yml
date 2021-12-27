@@ -1,5 +1,7 @@
 apiVersion: v1
 kind: Namespace
+labels:
+  istio-injection: enabled
 metadata:
   name: httpserver
 ---
