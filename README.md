@@ -72,3 +72,8 @@ helm upgrade --install loki ./loki-stack --set grafana.enabled=true,prometheus.e
 ## grafana查询示例
 ![grafana查询示例](images/grafana.png)
 </details>
+
+<details>
+<summary><img src="https://img.shields.io/badge/HW05-Istio-466bb0?logo=Istio" /></summary>
+
+</details>
