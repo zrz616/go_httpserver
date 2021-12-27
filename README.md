@@ -89,6 +89,8 @@ kubectl apply -f istio/istio-specs.yaml -n httpserver
 ## istio analyze
 ``` shell
 istioctl analyze -n httpserver # 分析istio相关配置
+# Warning [IST0117] (Deployment toolbox.httpserver) No service associated with this deployment. Service mesh deployments must be associated with a service.
+# 通过分析发现有个deployment没加service
 ```
 
 ## curl 访问
