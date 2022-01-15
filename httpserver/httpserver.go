@@ -25,6 +25,30 @@ func getClientIP(r *http.Request) string {
     return ""
 }
 
+func tracing(w http.ResponseWriter, r *http.Request) {
+    glog.V(1).Info("tracing")
+    req, err := http.NewRequest("GET", "http://service1", nil)
+    if err != nil {
+        fmt.Printf("%s", err)
+    }
+    lowerCaseHeader := make(http.Header)
+    for key, value := range r.Header {
+        lowerCaseHeader[strings.ToLower(key)] = value
+    }
+    glog.V(1).Info("headers:", lowerCaseHeader)
+    req.Header = lowerCaseHeader
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        glog.Info("HTTP get failed with error: ", "error", err)
+    } else {
+        glog.Info("HTTP get succeeded")
+    }
+    if resp != nil {
+        resp.Write(w)
+    }
+}
+
 func randInt(min int, max int) int {
     rand.Seed(time.Now().UTC().UnixNano())
     return min + rand.Intn(max-min)
@@ -62,6 +86,7 @@ func NewServer(addr string) *http.Server {
     metrics.Register()
     mux := http.NewServeMux()
     mux.HandleFunc("/", rootHandler)
+    mux.HandleFunc("/tracing", tracing)
     mux.HandleFunc("/healthz", healthcheckHandler)
     mux.Handle("/metrics", promhttp.Handler())
     return &http.Server{
